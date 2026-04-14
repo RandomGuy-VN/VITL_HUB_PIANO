@@ -1,4 +1,168 @@
     local HttpService = game:GetService("HttpService")
+    local TweenService = game:GetService("TweenService")
+    
+    local LoadGui = Instance.new("ScreenGui")
+    LoadGui.Name = "VitlLoadingScreen"
+    LoadGui.ResetOnSpawn = false
+    LoadGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    local successGui = pcall(function() LoadGui.Parent = game:GetService("CoreGui") end)
+    if not successGui then LoadGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui") end
+
+    local FullscreenCover = Instance.new("Frame")
+    FullscreenCover.Size = UDim2.fromScale(1, 1)
+    FullscreenCover.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
+    FullscreenCover.BackgroundTransparency = 1
+    FullscreenCover.ZIndex = 0
+    FullscreenCover.Parent = LoadGui
+
+    local MainFrame = Instance.new("Frame")
+    MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    MainFrame.Size = UDim2.new(0, 340, 0, 130)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    MainFrame.BackgroundTransparency = 1
+    MainFrame.ZIndex = 1
+    MainFrame.Parent = LoadGui
+    
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 12)
+    UICorner.Parent = MainFrame
+
+    local UIStroke = Instance.new("UIStroke")
+    UIStroke.Color = Color3.fromRGB(255, 255, 255)
+    UIStroke.Thickness = 1.5
+    UIStroke.Transparency = 1
+    UIStroke.Parent = MainFrame
+
+    local StrokeGradient = Instance.new("UIGradient")
+    StrokeGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(130, 0, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 200, 255))
+    })
+    StrokeGradient.Parent = UIStroke
+
+    local Shadow = Instance.new("ImageLabel")
+    Shadow.Name = "Shadow"
+    Shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+    Shadow.BackgroundTransparency = 1
+    Shadow.Position = UDim2.new(0.5, 0, 0.5, 3)
+    Shadow.Size = UDim2.new(1, 40, 1, 40)
+    Shadow.ZIndex = 0
+    Shadow.Image = "rbxassetid://6015897043"
+    Shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+    Shadow.ImageTransparency = 1
+    Shadow.SliceCenter = Rect.new(49, 49, 450, 450)
+    Shadow.ScaleType = Enum.ScaleType.Slice
+    Shadow.Parent = MainFrame
+
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+    TitleLabel.Position = UDim2.new(0, 0, 0, 10)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Font = Enum.Font.GothamBlack
+    TitleLabel.Text = "VITL PIANO"
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 28
+    TitleLabel.TextTransparency = 1
+    TitleLabel.ZIndex = 2
+    TitleLabel.Parent = MainFrame
+
+    local TitleGradient = Instance.new("UIGradient")
+    TitleGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(150, 150, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+    })
+    TitleGradient.Parent = TitleLabel
+
+    local SubtitleLabel = Instance.new("TextLabel")
+    SubtitleLabel.Size = UDim2.new(1, 0, 0, 15)
+    SubtitleLabel.Position = UDim2.new(0, 0, 0, 45)
+    SubtitleLabel.BackgroundTransparency = 1
+    SubtitleLabel.Font = Enum.Font.GothamMedium
+    SubtitleLabel.Text = "Made by vitl1107 with <3"
+    SubtitleLabel.TextColor3 = Color3.fromRGB(180, 180, 220)
+    SubtitleLabel.TextSize = 12
+    SubtitleLabel.TextTransparency = 1
+    SubtitleLabel.ZIndex = 2
+    SubtitleLabel.Parent = MainFrame
+
+    local StatusLabel = Instance.new("TextLabel")
+    StatusLabel.Size = UDim2.new(1, 0, 0, 20)
+    StatusLabel.Position = UDim2.new(0, 0, 0, 75)
+    StatusLabel.BackgroundTransparency = 1
+    StatusLabel.Font = Enum.Font.GothamSemibold
+    StatusLabel.Text = "Initializing..."
+    StatusLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+    StatusLabel.TextSize = 13
+    StatusLabel.TextTransparency = 1
+    StatusLabel.ZIndex = 2
+    StatusLabel.Parent = MainFrame
+
+    local BarBackground = Instance.new("Frame")
+    BarBackground.Size = UDim2.new(0, 280, 0, 6)
+    BarBackground.Position = UDim2.new(0.5, 0, 0, 105)
+    BarBackground.AnchorPoint = Vector2.new(0.5, 0)
+    BarBackground.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+    BarBackground.BackgroundTransparency = 1
+    BarBackground.ClipsDescendants = true
+    BarBackground.ZIndex = 2
+    BarBackground.Parent = MainFrame
+
+    local BarCorner = Instance.new("UICorner")
+    BarCorner.CornerRadius = UDim.new(1, 0)
+    BarCorner.Parent = BarBackground
+
+    local BarFill = Instance.new("Frame")
+    BarFill.Size = UDim2.new(0, 0, 1, 0)
+    BarFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    BarFill.BackgroundTransparency = 1
+    BarFill.ZIndex = 2
+    BarFill.Parent = BarBackground
+
+    local BarFillCorner = Instance.new("UICorner")
+    BarFillCorner.CornerRadius = UDim.new(1, 0)
+    BarFillCorner.Parent = BarFill
+
+    local BarGradient = Instance.new("UIGradient")
+    BarGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(130, 0, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 200, 255))
+    })
+    BarGradient.Parent = BarFill
+
+    local isLoading = true
+    task.spawn(function()
+        local direction = 1
+        local offset = 0
+        while isLoading and MainFrame.Parent do
+            offset = offset + (task.wait() * 0.4 * direction)
+            if offset >= 0.8 then direction = -1 offset = 0.8 end
+            if offset <= 0.2 then direction = 1 offset = 0.2 end
+            TitleGradient.Offset = Vector2.new(offset - 0.5, 0)
+            StrokeGradient.Rotation = offset * 360
+        end
+    end)
+    
+    local fadeInTime = 0.6
+    TweenService:Create(FullscreenCover, TweenInfo.new(fadeInTime), {BackgroundTransparency = 0.35}):Play()
+    TweenService:Create(MainFrame, TweenInfo.new(fadeInTime), {BackgroundTransparency = 0.05}):Play()
+    TweenService:Create(UIStroke, TweenInfo.new(fadeInTime), {Transparency = 0}):Play()
+    TweenService:Create(Shadow, TweenInfo.new(fadeInTime), {ImageTransparency = 0.3}):Play()
+    TweenService:Create(TitleLabel, TweenInfo.new(fadeInTime), {TextTransparency = 0}):Play()
+    TweenService:Create(SubtitleLabel, TweenInfo.new(fadeInTime), {TextTransparency = 0}):Play()
+    TweenService:Create(StatusLabel, TweenInfo.new(fadeInTime), {TextTransparency = 0}):Play()
+    TweenService:Create(BarBackground, TweenInfo.new(fadeInTime), {BackgroundTransparency = 0}):Play()
+    TweenService:Create(BarFill, TweenInfo.new(fadeInTime), {BackgroundTransparency = 0}):Play()
+    task.wait(fadeInTime)
+
+    local function updateLoading(text, progress)
+        StatusLabel.Text = text
+        TweenService:Create(BarFill, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(progress, 0, 1, 0)}):Play()
+        task.wait(0.1)
+    end
+
+    updateLoading("Loading Configuration...", 0.2)
 
     local config = {
         language = "vi",
@@ -89,6 +253,8 @@
 
     local T = translations[config.language] or translations.vi
 
+    updateLoading("Loading Custom Songs...", 0.4)
+
     local customSongs = {}
     if isfile and isfile("PianoTuDong_Songs.json") then
         local success, result = pcall(function()
@@ -132,6 +298,9 @@
     end
 
     local gistSongs = {}
+    
+    updateLoading("Loading Playlists...", 0.6)
+
     if config.song_list_url and config.song_list_url ~= "" then
         local url = config.song_list_url
         -- Try direct fetch first, then fallback proxies for blocked domains
@@ -182,6 +351,7 @@
         for _, s in ipairs(customSongs) do table.insert(allSongs, s) end
     end
 
+    updateLoading("Loading GUI Library...", 0.8)
     local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/refs/heads/main/dist/main.lua", true))()
 
     local SCRIPT_VERSION = "V1.25 Stable"
@@ -489,3 +659,19 @@
     else
         ToggleBtn.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     end
+
+    updateLoading("Complete!", 1)
+    task.wait(0.5)
+    local fadeOutTime = 0.5
+    isLoading = false
+    TweenService:Create(FullscreenCover, TweenInfo.new(fadeOutTime), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(MainFrame, TweenInfo.new(fadeOutTime), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(UIStroke, TweenInfo.new(fadeOutTime), {Transparency = 1}):Play()
+    TweenService:Create(Shadow, TweenInfo.new(fadeOutTime), {ImageTransparency = 1}):Play()
+    TweenService:Create(TitleLabel, TweenInfo.new(fadeOutTime), {TextTransparency = 1}):Play()
+    TweenService:Create(SubtitleLabel, TweenInfo.new(fadeOutTime), {TextTransparency = 1}):Play()
+    TweenService:Create(StatusLabel, TweenInfo.new(fadeOutTime), {TextTransparency = 1}):Play()
+    TweenService:Create(BarBackground, TweenInfo.new(fadeOutTime), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(BarFill, TweenInfo.new(fadeOutTime), {BackgroundTransparency = 1}):Play()
+    task.wait(fadeOutTime)
+    LoadGui:Destroy()
